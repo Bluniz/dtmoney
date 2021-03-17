@@ -1,6 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createServer } from "miragejs";
 import { App } from "./App";
+
+createServer({
+  routes() {
+    //Deve interceptar todas as chamadas com inicio da rota escrita 'api'
+    this.namespace = "api";
+    //Quando houver uma requisição com Get pra rota transactions
+    this.get("/trasactions", () => {
+      return [
+        {
+          id: 1,
+          title: "Transaction 1",
+          amount: 400,
+          type: "deposit",
+          category: "Food",
+          createdAt: new Date(),
+        },
+      ];
+    });
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
