@@ -3,8 +3,8 @@ import { Container, TransactionTypeContainer, RadioBox } from "./styles";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
-import { FormEvent, useState } from "react";
-import { api } from "../../services/api";
+import { FormEvent, useContext, useState } from "react";
+import { TransactionsContext } from "../../contexts/TransactionsContext";
 
 interface NewTransactionModalProps {
   isOpen: boolean;
@@ -18,19 +18,25 @@ export function NewTransactionModal({
   const [type, setType] = useState("deposit");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [value, setValue] = useState(0);
+  const [amout, setAmout] = useState(0);
 
-  function handleCreateNewTransaction(event: FormEvent) {
+  const { createTransaction } = useContext(TransactionsContext);
+
+  async function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
 
-    const data = {
+    await createTransaction({
       title,
-      value,
+      amout,
       type,
       category,
-    };
+    });
 
-    api.post("/transactions", data);
+    setTitle("");
+    setAmout(0);
+    setCategory("");
+    setType("deposit");
+    onRequestClose();
   }
 
   return (
@@ -58,8 +64,8 @@ export function NewTransactionModal({
         <input
           type="number"
           placeholder="Valor"
-          value={value}
-          onChange={(event) => setValue(Number(event.target.value))}
+          value={amout}
+          onChange={(event) => setAmout(Number(event.target.value))}
         />
 
         <TransactionTypeContainer>
