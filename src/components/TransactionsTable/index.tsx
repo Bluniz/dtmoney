@@ -1,8 +1,13 @@
 import { Container } from "./styles";
 import { useTransactions } from "../../hooks/useTransactions";
+import { BiTrash } from "react-icons/bi";
 
 export function TransactionsTable() {
-  const { transactions } = useTransactions();
+  const { transactions, deleteTransaction } = useTransactions();
+
+  async function handleDeleteTransaction(id: number) {
+    await deleteTransaction(id);
+  }
 
   return (
     <Container>
@@ -30,6 +35,14 @@ export function TransactionsTable() {
                 {new Intl.DateTimeFormat("pt-BR").format(
                   new Date(transaction.createdAt)
                 )}
+              </td>
+              <td>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteTransaction(transaction.id)}
+                >
+                  <BiTrash />
+                </button>
               </td>
             </tr>
           ))}

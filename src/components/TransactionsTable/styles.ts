@@ -34,6 +34,19 @@ export const Container = styled.div`
       &.withdraw {
         color: var(--red);
       }
+
+      button {
+        border: 0;
+        background: transparent;
+        svg {
+          width: 20px;
+          height: 20px;
+
+          &:hover {
+            color: red;
+          }
+        }
+      }
     }
   }
 `;
